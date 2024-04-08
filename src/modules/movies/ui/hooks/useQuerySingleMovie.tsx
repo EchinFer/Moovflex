@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { moviesControllers } from "../../controllers";
 import { SingleMovieRequest, SingleMovieResponse } from "../../core/types/services";
+import { movieCollectionApiErrors } from "../../core/errors/movieApiErrors";
 
 interface UseQuerySingleMovieProps {
     id: SingleMovieRequest["i"];
@@ -16,7 +17,12 @@ export const useQuerySingleMovie = ({ id, plot }: UseQuerySingleMovieProps) => {
             if (!data) throw new AxiosError("Error fetching movie");
 
             if (data.Response === "False") {
-                throw new AxiosError(data.Error, data.Error);
+                const error_ = movieCollectionApiErrors.find((error) => error.error === data.Error) ?? {
+                    error: "Unknown error",
+                    status: 500,
+                    message: "Hubo un error al cargar las películas",
+                };
+                throw new AxiosError(error_.message, error_.status.toString());
             }
 
             return data;

@@ -7,114 +7,33 @@ interface ApplyDarkStyles {
     (scheme: CSSObject): CSSObject;
 }
 
-declare module '@mui/material/styles' {
-    interface Theme {
-        applyDarkStyles: ApplyDarkStyles;
-    }
-}
-
-declare module '@mui/material/styles/createPalette' {
-    interface ColorRange {
-        50: string;
-        100: string;
-        200: string;
-        300: string;
-        400: string;
-        500: string;
-        600: string;
-        700: string;
-        800: string;
-        900: string;
-    }
-
-    interface PaletteColor extends ColorRange { }
-
-    interface Palette {
-        primaryDark: PaletteColor;
-        gradients: {
-            lightGrayRadio: string;
-            stylizedRadio: string;
-            linearSubtle: string;
-        };
-    }
-
-    interface TypeText {
-        tertiary: string;
-    }
-}
-
-declare module '@mui/material/styles/createTypography' {
-    interface TypographyOptions {
-        fontWeightSemiBold?: number;
-        fontWeightExtraBold?: number;
-        fontFamilyCode?: string;
-        fontFamilySystem?: string;
-    }
-
-    interface Typography {
-        fontWeightSemiBold: number;
-        fontWeightExtraBold: number;
-        fontFamilyCode: string;
-        fontFamilySystem: string;
-    }
-}
-
-declare module '@mui/material/Chip' {
-    interface ChipPropsColorOverrides {
-        grey: true;
-    }
-}
-
-declare module '@mui/material/SvgIcon' {
-    interface SvgIconPropsColorOverrides {
-        danger: true;
-    }
-    interface SvgIconPropsSizeOverrides {
-        xs: true;
-        sm: true;
-        md: true;
-        lg: true;
-        xl: true;
-        xl2: true;
-        xl3: true;
-        xl4: true;
-    }
-}
-
-// TODO: enable this once types conflict is fixed
-// declare module '@mui/material/Button' {
-//   interface ButtonPropsVariantOverrides {
-//     code: true;
-//   }
-// }
-
 const defaultTheme = createTheme();
 
-export const blue = {
-    50: '#e5f0f4',
-    100: '#bfdbe6',
-    200: '#9cc5d5',
-    300: '#7daec4',
-    400: '#689eba',
-    main: '#689eba',
-    500: '#578fb0',
-    600: '#4c82a4',
-    700: '#417294',
-    800: '#386282',
-    900: '#2a4662',
+export const green = {
+    50: '#ffdcbe',
+    100: '#ffb9a3',
+    200: '#e89581',
+    300: '#c7725c',
+    400: '#ae5641',
+    main: '#691515',
+    500: '#963b27',
+    600: '#893122',
+    700: '#78251a',
+    800: '#691515',
+    900: '#58010c',
 };
-export const blueDark = {
-    50: '#e5f0f4',
-    100: '#bfdbe6',
-    200: '#9cc5d5',
-    300: '#7daec4',
-    400: '#689eba',
-    main: '#689eba',
-    500: '#578fb0',
-    600: '#4c82a4',
-    700: '#417294',
-    800: '#386282',
-    900: '#2a4662',
+export const greenDark = {
+    50: '#ffdcbe',
+    100: '#ffb9a3',
+    200: '#e89581',
+    300: '#c7725c',
+    400: '#ae5641',
+    main: '#691515',
+    500: '#963b27',
+    600: '#893122',
+    700: '#78251a',
+    800: '#691515',
+    900: '#58010c',
 };
 export const grey = {
     50: '#F3F6F9',
@@ -183,8 +102,8 @@ const systemFont = [
 
 export const getMetaThemeColor = (mode: 'light' | 'dark') => {
     const themeColor = {
-        light: blue[600],
-        dark: blueDark[900],
+        light: green[600],
+        dark: greenDark[900],
     };
     return themeColor[mode];
 };
@@ -193,31 +112,33 @@ export const getDesignTokens = (mode: 'light' | 'dark') =>
     ({
         palette: {
             primary: {
-                ...blue,
+                ...green,
                 ...(mode === 'dark' && {
-                    main: blue[400],
+                    main: green[400],
                 }),
             },
             secondary: {
                 ...grey,
                 ...(mode === 'light' && {
-                    main: blueDark[100],
-                    contrastText: blueDark[600],
+                    main: greenDark[100],
+                    contrastText: greenDark[600],
                 }),
                 ...(mode === 'dark' && {
-                    main: blueDark[700],
-                    contrastText: blueDark[600],
+                    main: greenDark[700],
+                    contrastText: greenDark[600],
                 }),
             },
-            divider: mode === 'dark' ? alpha(blueDark[500], 0.2) : grey[100],
-            primaryDark: blueDark,
+            divider: mode === 'dark' ? alpha(greenDark[500], 0.2) : grey[100],
+            primaryDark: greenDark,
             mode,
-            ...(mode === 'dark' && {
-                background: {
-                    default: blueDark[50],
-                    paper: alpha(blueDark[800], 0.8),
-                },
-            }),
+            background: {
+                default: "#691515",
+                paper: "#1A1A1A",
+                ...(mode === "dark" && {
+                    default: greenDark[900],
+                    paper: greenDark[800],
+                }),
+            },
             common: {
                 black: '#0B0D0E',
             },
@@ -264,12 +185,12 @@ export const getDesignTokens = (mode: 'light' | 'dark') =>
                         : 'linear-gradient(rgba(255 255 255 / 0.3), rgba(255 255 255 / 0.3)), linear-gradient(254.86deg, rgba(194, 224, 255, 0.12) 0%, rgba(194, 224, 255, 0.12) 0%, rgba(255, 255, 255, 0.3) 49.98%, rgba(240, 247, 255, 0.3) 100.95%)',
                 linearSubtle:
                     mode === 'light'
-                        ? `linear-gradient(to top right, ${alpha(blue[50], 0.3)} 40%, ${alpha(
+                        ? `linear-gradient(to top right, ${alpha(green[50], 0.3)} 40%, ${alpha(
                             grey[50],
                             0.2,
                         )} 100%)`
-                        : `linear-gradient(to top right, ${alpha(blue[900], 0.1)} 40%, ${alpha(
-                            blueDark[800],
+                        : `linear-gradient(to top right, ${alpha(green[900], 0.1)} 40%, ${alpha(
+                            greenDark[800],
                             0.2,
                         )} 100%)`,
             },
@@ -280,9 +201,6 @@ export const getDesignTokens = (mode: 'light' | 'dark') =>
         spacing: 8,
         typography: {
             fontFamily: ['"IBM Plex Sans"', ...systemFont].join(','),
-            // Match VS Code
-            // https://github.com/microsoft/vscode/blob/b38691f611d1ce3ef437c67a1b047c757b7b4e53/src/vs/editor/common/config/editorOptions.ts#L4578-L4580
-            // https://github.com/microsoft/vscode/blob/d950552131d7350a45dac8b59bf179469c36c2ac/src/vs/editor/standalone/browser/standalone-tokens.css#L10
             fontFamilyCode: [
                 'Menlo', // macOS
                 'Consolas', // Windows
@@ -300,7 +218,7 @@ export const getDesignTokens = (mode: 'light' | 'dark') =>
                 lineHeight: 78 / 70,
                 letterSpacing: -0.2,
                 ...(mode === 'light' && {
-                    color: blueDark[900],
+                    color: greenDark[900],
                 }),
             },
             h2: {
@@ -309,7 +227,7 @@ export const getDesignTokens = (mode: 'light' | 'dark') =>
                 fontWeight: 600,
                 lineHeight: 44 / 36,
                 letterSpacing: -0.2,
-                color: mode === 'dark' ? grey[100] : blueDark[700],
+                color: mode === 'dark' ? grey[100] : greenDark[700],
             },
             h3: {
                 fontFamily: ['"General Sans"', ...systemFont].join(','),
@@ -327,7 +245,7 @@ export const getDesignTokens = (mode: 'light' | 'dark') =>
                 fontSize: defaultTheme.typography.pxToRem(24),
                 lineHeight: 36 / 24,
                 letterSpacing: 0.1,
-                color: mode === 'dark' ? blue[300] : blue.main,
+                color: mode === 'dark' ? green[300] : green.main,
             },
             h6: {
                 fontSize: defaultTheme.typography.pxToRem(20),
@@ -385,59 +303,6 @@ export const getDesignTokens = (mode: 'light' | 'dark') =>
                 letterSpacing: 0,
             },
         },
-        /**
-         * This utility exists to help transitioning to CSS variables page by page (prevent dark mode flicker).
-         * It will use the proper styling method based on the theme because the component might be on the page that does not support CSS variables yet.
-         *
-         * 😓 Without this utility:
-         * {
-         *   ...theme.vars ? {
-         *     color: theme.vars.palette.primary.main,
-         *     [theme.getColorScheme('dark')]: {
-         *       color: '#fff',
-         *     }
-         *   } : {
-         *     color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
-         *   }
-         * }
-         *
-         * 🤩 Using the utility:
-         * {
-         *   color: (theme.vars || theme).palette.primary.main,
-         *   ...theme.applyDarkStyles({
-         *     color: '#fff',
-         *   }),
-         * }
-         *
-         * -------------------------------------------------------------------------------------------------
-         * 💡 This util should be used in an array if the styles contain pseudo classes or nested selectors:
-         *
-         * ❌ There is a chance that the upper selectors could be overridden
-         * {
-         *    // the whole selector could be overridden
-         *   '&::before': {
-         *     color: ...
-         *   },
-         *   ...theme.applyDarkStyles({
-         *      '&::before': {
-         *        color: ...
-         *      }
-         *   })
-         * }
-         *
-         * ✅ use an array (supports in both emotion and styled-components)
-         * Only the `color` will be overridden in dark mode.
-         *  [
-         *    '&::before': {
-         *      color: ...
-         *    },
-         *    theme.applyDarkStyles({
-         *      '&::before': {
-         *        color: ...
-         *      }
-         *    })
-         *  ]
-         */
         applyDarkStyles(css: Parameters<ApplyDarkStyles>[0]) {
             return (this as Theme).applyStyles('dark', css);
         },
@@ -599,6 +464,7 @@ export function getThemedComponents(): ThemeOptions {
                             '&:active': {
                                 backgroundColor: (theme.vars || theme).palette.primaryDark[700],
                             },
+                            borderRadius: theme.spacing(2),
                         }),
                         ...(ownerState.variant === 'text' && {
                             color: (theme.vars || theme).palette.primary[600],
@@ -1306,14 +1172,6 @@ export function getThemedComponents(): ThemeOptions {
             MuiCssBaseline: {
                 defaultProps: {
                     enableColorScheme: true,
-                },
-                styleOverrides: {
-                    html: {
-                        // overflowY: 'scroll',
-                        // TODO add support for it,
-                        // https://github.com/mui/material-ui/issues/40748
-                        // scrollbarGutter: 'stable',
-                    },
                 },
             },
         },

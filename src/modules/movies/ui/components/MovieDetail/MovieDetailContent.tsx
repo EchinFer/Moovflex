@@ -22,7 +22,17 @@ export const MovieDetailContent = ({ movie }: MovieDetailContentProps) => {
             <Stack direction={"row"} spacing={1}>
                 {
                     movie.Genre.split(",").map((genre, index) => (
-                        <Chip key={index} label={genre.trim()} color="info" />
+                        <Chip
+                            key={index}
+                            label={genre.trim()}
+                            sx={{
+                                backgroundColor: "#FAAF00",
+                                color: "warning.contrastText",
+                                "&:hover": {
+                                    backgroundColor: "#FAAF00",
+                                },
+                            }}
+                        />
                     ))
                 }
             </Stack>

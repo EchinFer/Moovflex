@@ -1,14 +1,28 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import NotFoundPlaceholder from '@/assets/images/not-found-placeholder.png';
-import { Card, CardMedia, Chip, Stack } from '@mui/material';
+import { Card, Chip } from '@mui/material';
+import React, { Suspense } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuerySingleMovie } from '../../hooks/useQuerySingleMovie';
-import { MovieDetailContent } from './MovieDetailContent';
 import { MovieDetailSkeleton } from '../skeletons/MovieDetailSkeleton';
+
+const MovieDetailContent = React.lazy(async () => {
+    const module = await import('./MovieDetailContent');
+    return ({ default: module.MovieDetailContent });
+});
+
+const MovieDetailMedia = React.lazy(async () => {
+    const module = await import('./MovieDetailMedia');
+    return ({ default: module.MovieDetailMedia });
+});
+
+const MovieErrorDetail = React.lazy(async () => {
+    const module = await import('./MovieErrorDetail');
+    return ({ default: module.MovieErrorDetail });
+});
 
 export const MovieDetail = () => {
     const { movieId } = useParams();
-    const { data: movieData, isLoading } = useQuerySingleMovie({ id: movieId ?? "", plot: "full" });
+    const { data: movie, isLoading, isError, error } = useQuerySingleMovie({ id: movieId ?? "", plot: "full" });
 
     return (
         <>
@@ -16,7 +30,7 @@ export const MovieDetail = () => {
                 icon={<ArrowBackIcon />}
                 label="Volver al listado"
                 clickable
-                color="primary"
+                color="error"
                 sx={{ mb: 2 }}
                 component={Link}
                 to={"/"}
@@ -29,37 +43,29 @@ export const MovieDetail = () => {
                     flexDirection: {
                         xs: "column",
                         md: "row",
+                        ...(isError && {
+                            justifyContent: "center",
+                            alignItems: "center",
+                        })
                     },
                 }}
             >
-                {
-                    isLoading && (<MovieDetailSkeleton />)
-                }
-                <Stack
-                    alignItems={"center"}
-                >
-                    <CardMedia
-                        component="img"
-                        src={movieData?.Poster}
-                        alt={movieData?.Title}
-                        sx={{
-                            width: {
-                                xs: "100%",
-                                sm: "300px",
-                                md: "300px",
-                            },
-                            height: "100%",
-                            objectFit: "cover",
-                        }}
-                        onError={(e) => {
-                            e.currentTarget.src = NotFoundPlaceholder
-                        }}
+                {isLoading && (<MovieDetailSkeleton />)}
 
-                    />
-                </Stack>
-                {movieData && (
-                    <MovieDetailContent movie={movieData} />
+                {isError && (
+                    <Suspense fallback={<div>...</div>}>
+                        <MovieErrorDetail error={error} />
+                    </Suspense>
                 )}
+
+                <Suspense fallback={<MovieDetailSkeleton />}>
+                    {movie && (
+                        <>
+                            <MovieDetailMedia movie={movie} />
+                            <MovieDetailContent movie={movie} />
+                        </>
+                    )}
+                </Suspense>
             </Card>
         </>
     )

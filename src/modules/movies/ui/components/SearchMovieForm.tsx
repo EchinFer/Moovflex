@@ -1,22 +1,23 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Paper, Stack, TextField } from '@mui/material';
+import { Button, Paper, Stack } from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 import { useMovieSearchFilter, useMovieSetFilter, useMovieYearFilter } from '../stores/movieSearchFormStore';
 import { SearchTextField } from './inputs/SearchTextField';
-import { DatePickerField } from '@/components/ui/inputs/date/DatePicker';
-import dayjs, { Dayjs } from 'dayjs';
+import { SearchYearField } from './inputs/SearchYearField';
 
 export const SearchMovieForm = () => {
     const setFilter = useMovieSetFilter();
     const searchQuery = useMovieSearchFilter();
     const year = useMovieYearFilter();
+    const currentYear = year ? dayjs().year(year) : null;
 
     const [searchValue, setSearchValue] = useState<string>(searchQuery);
-    const [yearValue, setYearValue] = useState<Dayjs | null>();
+    const [yearValue, setYearValue] = useState<Dayjs | null>(currentYear);
 
 
-    const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setSearchValue(e.target.value);
+    const handleChangeSearch = ({ target: { value } }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setSearchValue(value)
     }
 
     const handleChangeYear = (date: Dayjs | null) => {
@@ -27,8 +28,8 @@ export const SearchMovieForm = () => {
         setFilter(searchValue, yearValue?.year());
     }
 
-    const handleClickDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") {
+    const handleClickDown = ({ key }: React.KeyboardEvent) => {
+        if (key === "Enter") {
             handleClickSearch();
         }
     }
@@ -63,26 +64,14 @@ export const SearchMovieForm = () => {
                 spacing={{ xs: 0, sm: 0, md: 1 }}
 
             >
-                <DatePickerField
-                    slotProps={{
-                        textField: {
-                            size: "small",
-                            sx: {
-                                width: 135
-                            },
-                        },
-                        field: {
-                            clearable: true,
-                            onClear: () => setYearValue(null),
-                        }
-                    }}
-                    views={['year']}
+                <SearchYearField
                     value={yearValue}
                     onChange={handleChangeYear}
                 />
+
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="error"
                     size="small"
                     startIcon={<SearchIcon />}
                     onClick={handleClickSearch}

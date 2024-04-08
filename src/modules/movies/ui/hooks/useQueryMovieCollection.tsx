@@ -28,7 +28,6 @@ export const useQueryMovieCollection = ({ searchQuery, year }: MovieSearchQuery)
                 };
                 throw new AxiosError(error_.message, error_.status.toString());
             }
-
             return data;
         },
         enabled: (!!searchQuery && searchQuery.length > 0),
@@ -43,8 +42,8 @@ export const useQueryMovieCollection = ({ searchQuery, year }: MovieSearchQuery)
             }
             return null;
         },
-        staleTime: 1000 * 60 * 60, // 5 minutes
-        gcTime: 1000 * 60 * 60, // 20 minutes
+        staleTime: 1000 * 60 * 20, // 20 minutes
+        gcTime: 1000 * 60 * 20, // 20 minutes
     });
 
     return query;

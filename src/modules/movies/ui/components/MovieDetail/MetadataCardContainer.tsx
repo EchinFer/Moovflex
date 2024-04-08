@@ -15,7 +15,7 @@ export const MetadataCardContainer = ({ movie }: MetadataCardContainerProps) => 
                     value={movie.Year}
                 />
                 <MetadataField
-                    label={"Fecha de lanzamiento"}
+                    label={"Lanzamiento"}
                     value={movie.Released}
                 />
             </MetadataCardRow>

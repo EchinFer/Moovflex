@@ -1,7 +1,4 @@
 import MainLayout from "@/components/layout/MainLayout";
-import NotFoundPage from "@/pages/_not_found";
-import HomePage from "@/pages/home";
-import MovieDetailPage from "@/pages/movieDetails";
 import { createBrowserRouter } from "react-router-dom";
 
 
@@ -12,15 +9,24 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <HomePage />,
+                lazy: async () => {
+                    const MovieDetailPage = await import("@/pages/home");
+                    return { Component: MovieDetailPage.default };
+                },
             },
             {
                 path: "/:movieId",
-                element: <MovieDetailPage />,
+                lazy: async () => {
+                    const MovieDetailPage = await import("@/pages/movieDetails");
+                    return { Component: MovieDetailPage.default };
+                }
             },
             {
                 path: "*",
-                element: <NotFoundPage />,
+                lazy: async () => {
+                    const NotFoundPage = await import("@/pages/_not_found");
+                    return { Component: NotFoundPage.default };
+                },
             },
         ],
     },

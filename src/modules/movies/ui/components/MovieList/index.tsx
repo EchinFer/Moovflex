@@ -1,13 +1,14 @@
-import NotFoundFaceImage from '@/assets/images/not-found-face.png';
-import SadFaceImage from '@/assets/images/sad-face.png';
-import { Box, Button, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
-import React, { useDeferredValue } from 'react';
-import { useQueryMovieCollection } from '../hooks/useQueryMovieCollection';
-import { useMovieSearchFilter, useMovieYearFilter } from '../stores/movieSearchFormStore';
-import MovieCardSkeleton from './skeletons/MovieCardSkeleton';
-import MovieCard from './cards/MovieCard';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Chip } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import React, { Suspense } from 'react';
+import { useQueryMovieCollection } from '../../hooks/useQueryMovieCollection';
+import { useMovieSearchFilter, useMovieYearFilter } from '../../stores/movieSearchFormStore';
+
+import MovieCardSkeleton from '../skeletons/MovieCardSkeleton';
+import { MovieErrorList } from './MovieErrorList';
+
+const MovieCard = React.lazy(() => import('../cards/MovieCard'));
 
 export default function MovieList() {
     const searchQuery = useMovieSearchFilter();
@@ -23,7 +24,6 @@ export default function MovieList() {
         isFetchingNextPage,
         isFetching,
     } = useQueryMovieCollection({ searchQuery, year });
-    const deferredValue = useDeferredValue(data);
 
     const handleClickViewMore = () => {
         if (hasNextPage) {
@@ -61,7 +61,7 @@ export default function MovieList() {
                 }
 
                 {
-                    deferredValue?.pages.map(({ Search }, i) => (
+                    data?.pages.map(({ Search }, i) => (
                         <React.Fragment key={i}>
                             {Search.map((movie) => (
                                 <Grid
@@ -72,7 +72,9 @@ export default function MovieList() {
                                     lg={3}
                                     xl={3}
                                 >
-                                    <MovieCard movie={movie} />
+                                    <Suspense fallback={<MovieCardSkeleton />}>
+                                        <MovieCard movie={movie} />
+                                    </Suspense>
                                 </Grid>
                             ))}
                         </React.Fragment>
@@ -81,38 +83,17 @@ export default function MovieList() {
 
                 {
                     isError && error && (
-                        <Grid
-                            xs={12}
-                            display={"flex"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                        >
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    gap: 2,
-                                }}
-                            >
-                                <img
-                                    src={error.code === "404" ? NotFoundFaceImage : SadFaceImage}
-                                    alt="Error"
-                                />
-                                <Typography variant={"h6"} align={"center"}>
-                                    {error?.message}
-                                </Typography>
-                            </Box>
-                        </Grid>
+                        <MovieErrorList error={error} />
                     )
                 }
 
             </Grid>
             {
                 hasNextPage && (
-                    <Button
+                    <Chip
+                        label="Cargar más"
+                        icon={<ExpandMoreIcon />}
                         onClick={handleClickViewMore}
-                        variant='outlined'
                         sx={{
                             mt: 2,
                             width: {
@@ -121,9 +102,9 @@ export default function MovieList() {
                             },
                         }}
                         disabled={isFetchingNextPage || isRefetching}
-                    >
-                        <ExpandMoreIcon />
-                    </Button>
+                        color="error"
+                        clickable
+                    />
                 )
             }
         </>

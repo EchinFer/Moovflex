@@ -16,7 +16,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
         <Card
             component={Link}
             to={`/${movie.imdbID}`}
-            elevation={1}
+            elevation={10}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -25,9 +25,11 @@ export default function MovieCard({ movie }: MovieCardProps) {
                 position: 'relative',
                 p: 1,
                 pt: 0,
+                cursor: 'pointer',
+                transition: 'box-shadow 0.3s ease-in-out',
                 ":hover": {
-                    cursor: 'pointer',
-                    boxShadow: 6,
+                    boxShadow: "0px 0px 10px 5px #FAAF00",
+                    
                 }
             }}
         >

@@ -2,7 +2,7 @@ export const movieCollectionApiErrors = [
     {
         error: "Movie not found!",
         status: 404,
-        message: "La película no se ha encontrado."
+        message: "La película no se ha encontrado"
     },
     {
         error: "Too many results.",
@@ -17,6 +17,11 @@ export const movieCollectionApiErrors = [
     {
         error: "Something went wrong.",
         status: 500,
-        message: "Hubo un error desconocido."
+        message: "Hubo un error desconocido"
+    },
+    {
+        error: "Incorrect IMDb ID.",
+        status: 404,
+        message: "La película no se ha encontrado"
     }
 ];
