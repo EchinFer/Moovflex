@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 
 export const router = createBrowserRouter([
-    {
+    {   
         path: "/",
         element: <MainLayout />,
         children: [
@@ -30,4 +30,6 @@ export const router = createBrowserRouter([
             },
         ],
     },
-]);
+], {
+    basename: import.meta.env.BASE_URL,
+});
