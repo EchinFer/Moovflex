@@ -30,6 +30,9 @@ Material-UI es una biblioteca de componentes de interfaz de usuario (UI) que se 
 
 Vite es un entorno de desarrollo rápido y optimizado para aplicaciones web. Se utiliza junto con React para mejorar el tiempo de compilación y el rendimiento general del proyecto.
 
+## Eslint
+Este proyecto utiliza Eslint para seguir las reglas recomendadas de Vite, React y TypeScript. Eslint es una herramienta de linting que ayuda a identificar y corregir errores de código, así como a mantener un estilo de código consistente en el proyecto.
+
 ## Instalación y ejecución
 
 Sigue estos pasos para instalar y ejecutar el proyecto:
