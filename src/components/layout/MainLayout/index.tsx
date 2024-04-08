@@ -6,7 +6,10 @@ export default function MainLayout() {
         <Container
             sx={{
                 minHeight: "100vh",
-                p: 2,
+                p: {
+                    xs: 1,
+                    sm: 2,
+                },
                 display: "flex",
                 flexDirection: "column",
             }}

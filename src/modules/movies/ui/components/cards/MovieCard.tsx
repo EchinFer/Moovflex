@@ -1,14 +1,15 @@
-import StarIcon from '@mui/icons-material/Star';
+import NotFoundPlaceholder from '@/assets/images/not-found-placeholder.png';
 import { Card, CardHeader, Stack, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { MoviesSearchModel } from '../../../core/models/MoviesSearchModel';
 import { useQuerySingleMovie } from '../../hooks/useQuerySingleMovie';
 import { RatingField } from '../fields/RatingField';
-import { Link } from 'react-router-dom';
+import { MovieCaptionSkeleton } from '../skeletons/MovieCaptionSkeleton';
 
 interface MovieCardProps {
     movie: MoviesSearchModel
 }
-export const MovieCard = ({ movie }: MovieCardProps) => {
+export default function MovieCard({ movie }: MovieCardProps) {
     const { data: movieData, isLoading } = useQuerySingleMovie({ id: movie.imdbID, plot: "short" })
 
     return (
@@ -38,7 +39,15 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
                     height: 'auto',
                     objectFit: 'cover',
                 }}
+                onError={(e) => {
+                    e.currentTarget.src = NotFoundPlaceholder
+                }}
             />
+            {
+                isLoading && (
+                    <MovieCaptionSkeleton />
+                )
+            }
             {movieData && (
                 <Stack spacing={"12px"}>
                     <CardHeader
@@ -52,7 +61,10 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
                             textAlign: 'center'
                         }}
                     />
-                    <RatingField size='small' value={parseInt(movieData.imdbRating)} />
+                    <RatingField
+                        size='small'
+                        value={movieData.imdbRating == "N/A" ? 0 : parseInt(movieData.imdbRating)}
+                    />
                     <Stack
                         direction={"row"}
                         spacing={"4px"}
@@ -63,11 +75,9 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
                         }}
                     >
                         <Typography variant="body2">
-                            {movieData.Plot}
+                            {movieData.Plot != "N/A" && movieData.Plot}
                         </Typography>
                     </Stack>
-
-
                 </Stack>
             )}
 

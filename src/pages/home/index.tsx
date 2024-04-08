@@ -1,4 +1,4 @@
-import { MovieList } from "@/modules/movies/ui/components/MovieList";
+import MovieList from "@/modules/movies/ui/components/MovieList";
 import { SearchMovieForm } from "@/modules/movies/ui/components/SearchMovieForm";
 import { Stack } from "@mui/material";
 

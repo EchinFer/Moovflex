@@ -10,10 +10,11 @@ interface SearchTextFieldProps {
 export const SearchTextField = ({ value, onChange, onKeyDown }:SearchTextFieldProps) => {
     return (
         <TextField
+            required
             value={value}
             onChange={onChange}
             onKeyDown={onKeyDown}
-            placeholder="¿Qué película estás buscando?"
+            placeholder="¿Qué película estás buscando? 🍿"
             variant="outlined"
             size="small"
             InputProps={{

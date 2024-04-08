@@ -16,19 +16,10 @@ export const useMovieSearchFilterStore = create<MovieSearchFilterState>(
             search: "",
             year: 0,
         },
+        setFilter: (search, year) => set(
+            () => ({ filter: { search, year } })
+        ),
         page: 1,
-        setFilter: (search, year) => {
-            set((state) => {
-                return {
-                    ...state,
-                    filter: {
-                        search,
-                        year,
-                    },
-                    page: 1,
-                };
-            });
-        },
     })
 );
 
@@ -49,6 +40,6 @@ export const useMovieYearFilter = () => {
 }
 
 export const useMovieSetFilter = () => {
-    const setSearch = useMovieSearchFilterStore((state) => state.setFilter);
-    return setSearch;
+    const setFilter = useMovieSearchFilterStore((state) => state.setFilter);
+    return setFilter;
 };

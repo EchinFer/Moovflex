@@ -5,6 +5,7 @@ interface RatingFieldProps {
     size?: "small" | "medium";
 }
 export const RatingField = ({ value, size = "medium" }: RatingFieldProps) => {
+    
     const rating = value / 2;
     return (
         <Box

@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material"
 
-export const MovieCardSkeleton = () => {
+export default function MovieCardSkeleton() {
     return (
         <Skeleton
             variant="rectangular"

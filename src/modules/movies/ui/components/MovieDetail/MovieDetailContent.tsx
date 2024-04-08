@@ -8,7 +8,13 @@ interface MovieDetailContentProps {
 }
 export const MovieDetailContent = ({ movie }: MovieDetailContentProps) => {
     return (
-        <CardContent sx={{ display: "flex", gap: 2, flexDirection: "column" }}>
+        <CardContent
+            sx={{
+                display: "flex",
+                gap: 2,
+                flexDirection: "column",
+            }}
+        >
             <Typography variant={"h3"}>
                 {movie.Title}
             </Typography>
@@ -22,14 +28,16 @@ export const MovieDetailContent = ({ movie }: MovieDetailContentProps) => {
             </Stack>
 
             <Typography variant={"body1"}>
-                {movie.Plot}
+                {movie.Plot != "N/A" && movie.Plot}
             </Typography>
 
             <Divider flexItem />
             <MetadataCardContainer movie={movie} />
 
             <Divider flexItem />
-            <RatingField value={parseFloat(movie.imdbRating)} />
+            <RatingField
+                value={movie.imdbRating == "N/A" ? 0 : parseInt(movie.imdbRating)}
+            />
         </CardContent>
     )
 }

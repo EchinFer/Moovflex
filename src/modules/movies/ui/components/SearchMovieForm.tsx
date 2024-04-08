@@ -1,8 +1,10 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Paper, Stack } from '@mui/material';
-import { useState, useTransition } from 'react';
+import { Button, Paper, Stack, TextField } from '@mui/material';
+import { useState } from 'react';
 import { useMovieSearchFilter, useMovieSetFilter, useMovieYearFilter } from '../stores/movieSearchFormStore';
 import { SearchTextField } from './inputs/SearchTextField';
+import { DatePickerField } from '@/components/ui/inputs/date/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
 
 export const SearchMovieForm = () => {
     const setFilter = useMovieSetFilter();
@@ -10,17 +12,19 @@ export const SearchMovieForm = () => {
     const year = useMovieYearFilter();
 
     const [searchValue, setSearchValue] = useState<string>(searchQuery);
-    const [pending, startTransition] = useTransition();
+    const [yearValue, setYearValue] = useState<Dayjs | null>();
 
 
     const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setSearchValue(e.target.value);
     }
 
+    const handleChangeYear = (date: Dayjs | null) => {
+        setYearValue(date);
+    }
+
     const handleClickSearch = () => {
-        startTransition(() => {
-            setFilter(searchQuery);
-        });
+        setFilter(searchValue, yearValue?.year());
     }
 
     const handleClickDown = (e: React.KeyboardEvent) => {
@@ -32,7 +36,10 @@ export const SearchMovieForm = () => {
     return (
         <Stack
             component={Paper}
-            direction={"row"}
+            direction={{
+                xs: "column",
+                sm: "row",
+            }}
             elevation={3}
             sx={{
                 padding: 2,
@@ -46,7 +53,33 @@ export const SearchMovieForm = () => {
                 onKeyDown={handleClickDown}
             />
 
-            <Stack direction={"row"} sx={{ ml: "auto" }}>
+            <Stack
+                direction={"row"}
+                sx={{ ml: "auto", }}
+                justifyContent={{
+                    xs: "space-between",
+                    sm: "inherit",
+                }}
+                spacing={{ xs: 0, sm: 0, md: 1 }}
+
+            >
+                <DatePickerField
+                    slotProps={{
+                        textField: {
+                            size: "small",
+                            sx: {
+                                width: 135
+                            },
+                        },
+                        field: {
+                            clearable: true,
+                            onClear: () => setYearValue(null),
+                        }
+                    }}
+                    views={['year']}
+                    value={yearValue}
+                    onChange={handleChangeYear}
+                />
                 <Button
                     variant="contained"
                     color="primary"

@@ -37,7 +37,7 @@ export const useQueryMovieCollection = ({ searchQuery, year }: MovieSearchQuery)
             const totalResults = parseInt(lastPage.totalResults);
             const totalRows = 10;
             const totalPages = Math.ceil(totalResults / totalRows);
-
+            console.log(allPages);
             if (lastPageParam < totalPages) {
                 return lastPageParam + 1;
             }

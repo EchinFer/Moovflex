@@ -3,12 +3,13 @@ import SadFaceImage from '@/assets/images/sad-face.png';
 import { Box, Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useDeferredValue } from 'react';
-import { MovieCardSkeleton } from '../components/skeletons/MovieCardSkeleton';
 import { useQueryMovieCollection } from '../hooks/useQueryMovieCollection';
 import { useMovieSearchFilter, useMovieYearFilter } from '../stores/movieSearchFormStore';
-import { MovieCard } from './cards/MovieCard';
+import MovieCardSkeleton from './skeletons/MovieCardSkeleton';
+import MovieCard from './cards/MovieCard';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export const MovieList = () => {
+export default function MovieList() {
     const searchQuery = useMovieSearchFilter();
     const year = useMovieYearFilter();
 
@@ -21,12 +22,8 @@ export const MovieList = () => {
         isRefetching,
         isFetchingNextPage,
         isFetching,
-        status,
     } = useQueryMovieCollection({ searchQuery, year });
-
     const deferredValue = useDeferredValue(data);
-
-    const numSkeleton = 4;
 
     const handleClickViewMore = () => {
         if (hasNextPage) {
@@ -34,6 +31,7 @@ export const MovieList = () => {
         }
     };
 
+    const numSkeleton = 4;
     return (
         <>
             <Grid
@@ -114,10 +112,17 @@ export const MovieList = () => {
                 hasNextPage && (
                     <Button
                         onClick={handleClickViewMore}
-                        sx={{ mt: 2 }}
+                        variant='outlined'
+                        sx={{
+                            mt: 2,
+                            width: {
+                                xs: "100%",
+                                sm: "auto",
+                            },
+                        }}
                         disabled={isFetchingNextPage || isRefetching}
                     >
-                        Ver más
+                        <ExpandMoreIcon />
                     </Button>
                 )
             }

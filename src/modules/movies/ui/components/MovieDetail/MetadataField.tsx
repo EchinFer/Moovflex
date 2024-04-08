@@ -7,7 +7,14 @@ interface MetadataFieldProps {
 }
 export const MetadataField = ({ label, value }: MetadataFieldProps) => {
     return (
-        <Grid xs={6} display={"flex"} alignItems={"center"} gap={1}>
+        <Grid 
+            xs={12}
+            sm={12}
+            md={6}
+            display={"flex"}
+            alignItems={"center"}
+            gap={1}
+        >
             <Typography variant={"subtitle1"}>
                 {label}:
             </Typography>

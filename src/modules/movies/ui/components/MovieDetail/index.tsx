@@ -1,13 +1,14 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import NotFoundPlaceholder from '@/assets/images/not-found-placeholder.png';
 import { Card, CardMedia, Chip, Stack } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useQuerySingleMovie } from '../../hooks/useQuerySingleMovie';
 import { MovieDetailContent } from './MovieDetailContent';
+import { MovieDetailSkeleton } from '../skeletons/MovieDetailSkeleton';
 
 export const MovieDetail = () => {
     const { movieId } = useParams();
-    const { data: movieData } = useQuerySingleMovie({ id: movieId ?? "", plot: "full" });
-    const navigate = useNavigate();
+    const { data: movieData, isLoading } = useQuerySingleMovie({ id: movieId ?? "", plot: "full" });
 
     return (
         <>
@@ -17,24 +18,41 @@ export const MovieDetail = () => {
                 clickable
                 color="primary"
                 sx={{ mb: 2 }}
-                onClick={() => navigate("/")}
+                component={Link}
+                to={"/"}
             />
+
             <Card
                 sx={{
                     display: "flex",
                     gap: 2,
-                    height: "100%",
+                    flexDirection: {
+                        xs: "column",
+                        md: "row",
+                    },
                 }}
             >
-                <Stack>
+                {
+                    isLoading && (<MovieDetailSkeleton />)
+                }
+                <Stack
+                    alignItems={"center"}
+                >
                     <CardMedia
                         component="img"
                         src={movieData?.Poster}
                         alt={movieData?.Title}
                         sx={{
-                            width: 300,
+                            width: {
+                                xs: "100%",
+                                sm: "300px",
+                                md: "300px",
+                            },
                             height: "100%",
                             objectFit: "cover",
+                        }}
+                        onError={(e) => {
+                            e.currentTarget.src = NotFoundPlaceholder
                         }}
 
                     />
