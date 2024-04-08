@@ -13,7 +13,7 @@ export const useQueryMovieCollection = ({ searchQuery, year }: MovieSearchQuery)
         queryKey: ["movies-list", searchQuery, year],
         queryFn: async ({ pageParam }) => {
             const data = await moviesControllers.searchMovies({
-                s: searchQuery,
+                s: searchQuery.trim(),
                 y: year,
                 page: pageParam,
             });
