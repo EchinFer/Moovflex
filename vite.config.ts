@@ -9,12 +9,4 @@ export default defineConfig({
         alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
     },
     base: "/Moovflex/",
-    build: {
-        rollupOptions: {
-            input: {
-                main: path.resolve(__dirname, "index.html"),
-                404: path.resolve(__dirname, "public/404.html"),
-            },
-        },
-    },
 })
