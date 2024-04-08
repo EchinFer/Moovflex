@@ -9,7 +9,7 @@ interface UseQuerySingleMovieProps {
 }
 export const useQuerySingleMovie = ({ id, plot }: UseQuerySingleMovieProps) => {
     const query = useQuery<SingleMovieResponse, AxiosError>({
-        queryKey: ['movie', id],
+        queryKey: ['movie', id, plot],
         queryFn: async () => {
             const data = await moviesControllers.getMovie({ i: id, plot: plot });
 

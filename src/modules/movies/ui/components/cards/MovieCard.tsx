@@ -1,23 +1,26 @@
-import { Box, Card, CardHeader, Chip, Rating, Stack, Typography } from '@mui/material'
-import { MoviesSearchModel } from '../../core/models/MoviesSearchModel'
-import { useQuerySingleMovie } from '../hooks/useQuerySingleMovie'
 import StarIcon from '@mui/icons-material/Star';
+import { Card, CardHeader, Stack, Typography } from '@mui/material';
+import { MoviesSearchModel } from '../../../core/models/MoviesSearchModel';
+import { useQuerySingleMovie } from '../../hooks/useQuerySingleMovie';
+import { RatingField } from '../fields/RatingField';
+import { Link } from 'react-router-dom';
 
 interface MovieCardProps {
     movie: MoviesSearchModel
 }
 export const MovieCard = ({ movie }: MovieCardProps) => {
-    const { data: movieData, isLoading } = useQuerySingleMovie({ id: movie.imdbID, plot: "short" }) 
+    const { data: movieData, isLoading } = useQuerySingleMovie({ id: movie.imdbID, plot: "short" })
 
     return (
         <Card
+            component={Link}
+            to={`/${movie.imdbID}`}
             elevation={1}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
                 overflow: 'hidden',
-                height: '100%',
                 position: 'relative',
                 p: 1,
                 pt: 0,
@@ -37,7 +40,7 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
                 }}
             />
             {movieData && (
-                <Stack>
+                <Stack spacing={"12px"}>
                     <CardHeader
                         title={movieData.Title}
                         sx={{
@@ -46,27 +49,10 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
                         }}
                         titleTypographyProps={{
                             variant: 'h6',
+                            textAlign: 'center'
                         }}
                     />
-                    <Stack
-                        direction={"row"}
-                        spacing={"4px"}
-                        alignItems={"center"}
-                        sx={{
-                            p: 1,
-                            pt: 0
-                        }}
-                    >
-                        <StarIcon
-                            color="warning"
-                            sx={{
-                                fontSize: 16
-                            }}
-                        />
-                        <Typography variant="body2">
-                            {movieData.imdbRating}/10
-                        </Typography>
-                    </Stack>
+                    <RatingField size='small' value={parseInt(movieData.imdbRating)} />
                     <Stack
                         direction={"row"}
                         spacing={"4px"}

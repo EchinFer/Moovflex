@@ -1,20 +1,26 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Button, Paper, Stack } from '@mui/material';
-import { useState } from 'react';
-import { useMovieSetFilter } from '../stores/movieSearchForm';
+import { useState, useTransition } from 'react';
+import { useMovieSearchFilter, useMovieSetFilter, useMovieYearFilter } from '../stores/movieSearchFormStore';
 import { SearchTextField } from './inputs/SearchTextField';
 
 export const SearchMovieForm = () => {
-    const [searchQuery, setSearchQuery] = useState<string>("");
-
     const setFilter = useMovieSetFilter();
+    const searchQuery = useMovieSearchFilter();
+    const year = useMovieYearFilter();
+
+    const [searchValue, setSearchValue] = useState<string>(searchQuery);
+    const [pending, startTransition] = useTransition();
+
 
     const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setSearchQuery(e.target.value);
+        setSearchValue(e.target.value);
     }
 
     const handleClickSearch = () => {
-        setFilter(searchQuery);
+        startTransition(() => {
+            setFilter(searchQuery);
+        });
     }
 
     const handleClickDown = (e: React.KeyboardEvent) => {
@@ -35,7 +41,7 @@ export const SearchMovieForm = () => {
             spacing={{ xs: 1, sm: 2, md: 3 }}
         >
             <SearchTextField
-                value={searchQuery}
+                value={searchValue}
                 onChange={handleChangeSearch}
                 onKeyDown={handleClickDown}
             />

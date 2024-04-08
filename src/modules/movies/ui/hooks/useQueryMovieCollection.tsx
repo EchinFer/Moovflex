@@ -28,21 +28,20 @@ export const useQueryMovieCollection = ({ searchQuery, year }: MovieSearchQuery)
                 };
                 throw new AxiosError(error_.message, error_.status.toString());
             }
-            
+
             return data;
         },
-        enabled: (!!searchQuery && searchQuery.length > 0) || !!year,
+        enabled: (!!searchQuery && searchQuery.length > 0),
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages, lastPageParam) => {
             const totalResults = parseInt(lastPage.totalResults);
-            const totalRows = lastPage.Search.length;
+            const totalRows = 10;
             const totalPages = Math.ceil(totalResults / totalRows);
 
             if (lastPageParam < totalPages) {
                 return lastPageParam + 1;
             }
-
-            return null; 
+            return null;
         },
         staleTime: 1000 * 60 * 60, // 5 minutes
         gcTime: 1000 * 60 * 60, // 20 minutes

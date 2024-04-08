@@ -1,20 +1,16 @@
 import NotFoundFaceImage from '@/assets/images/not-found-face.png';
 import SadFaceImage from '@/assets/images/sad-face.png';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { MovieCard } from '../components/MovieCard';
+import React, { useDeferredValue } from 'react';
 import { MovieCardSkeleton } from '../components/skeletons/MovieCardSkeleton';
 import { useQueryMovieCollection } from '../hooks/useQueryMovieCollection';
-import { useMovieSearchFilter, useMovieYearFilter } from '../stores/movieSearchForm';
-import { useInView } from 'react-intersection-observer';
-import React, { useEffect } from 'react';
+import { useMovieSearchFilter, useMovieYearFilter } from '../stores/movieSearchFormStore';
+import { MovieCard } from './cards/MovieCard';
 
 export const MovieList = () => {
     const searchQuery = useMovieSearchFilter();
     const year = useMovieYearFilter();
-    const { ref, inView } = useInView({
-        delay: 400,
-    });
 
     const {
         data,
@@ -24,102 +20,107 @@ export const MovieList = () => {
         hasNextPage,
         isRefetching,
         isFetchingNextPage,
-        isLoading,
+        isFetching,
+        status,
     } = useQueryMovieCollection({ searchQuery, year });
+
+    const deferredValue = useDeferredValue(data);
 
     const numSkeleton = 4;
 
-    useEffect(() => {
-        if (inView
-            && hasNextPage
-            && !isRefetching
-            && !isFetchingNextPage
-            && !isLoading
-        ) {
+    const handleClickViewMore = () => {
+        if (hasNextPage) {
             fetchNextPage();
         }
-    }, [inView, hasNextPage])
+    };
 
-    const hasData = data?.pages ? data.pages.length > 0 : false;
     return (
-        <Grid
-            container
-            rowSpacing={{ xs: 3, sm: 3, md: 3 }}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            alignItems={"stretch"}
-            sx={{
-                flex: 1,
-            }}
-        >
-            {
-                isRefetching && (
-                    Array.from({ length: numSkeleton }).map((_, index) => (
-                        <Grid
-                            key={index}
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={3}
-                            xl={3}
-                        >
-                            <MovieCardSkeleton />
-                        </Grid>
-                    ))
-                )
-            }
-
-            {
-                data?.pages.map(({ Search }, i) => (
-                    <React.Fragment key={i}>
-                        {Search.map((movie) => (
+        <>
+            <Grid
+                container
+                rowSpacing={{ xs: 3, sm: 3, md: 3 }}
+                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                alignItems={"stretch"}
+                sx={{
+                    flex: 1,
+                }}
+            >
+                {
+                    isFetching && (
+                        Array.from({ length: numSkeleton }).map((_, index) => (
                             <Grid
-                                key={movie.imdbID}
+                                key={index}
                                 xs={12}
                                 sm={6}
                                 md={4}
                                 lg={3}
                                 xl={3}
                             >
-                                <MovieCard movie={movie} />
+                                <MovieCardSkeleton />
                             </Grid>
-                        ))}
-                    </React.Fragment>
-                ))
-            }
+                        ))
+                    )
+                }
 
-            {
-                isError && error && (
-                    <Grid
-                        xs={12}
-                        display={"flex"}
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                    >
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                gap: 2,
-                            }}
+                {
+                    deferredValue?.pages.map(({ Search }, i) => (
+                        <React.Fragment key={i}>
+                            {Search.map((movie) => (
+                                <Grid
+                                    key={movie.imdbID}
+                                    xs={12}
+                                    sm={6}
+                                    md={4}
+                                    lg={3}
+                                    xl={3}
+                                >
+                                    <MovieCard movie={movie} />
+                                </Grid>
+                            ))}
+                        </React.Fragment>
+                    ))
+                }
+
+                {
+                    isError && error && (
+                        <Grid
+                            xs={12}
+                            display={"flex"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
                         >
-                            <img
-                                src={error.code === "404" ? NotFoundFaceImage : SadFaceImage}
-                                alt="Error"
-                            />
-                            <Typography variant={"h6"} align={"center"}>
-                                {error?.message}
-                            </Typography>
-                        </Box>
-                    </Grid>
-                )
-            }
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    gap: 2,
+                                }}
+                            >
+                                <img
+                                    src={error.code === "404" ? NotFoundFaceImage : SadFaceImage}
+                                    alt="Error"
+                                />
+                                <Typography variant={"h6"} align={"center"}>
+                                    {error?.message}
+                                </Typography>
+                            </Box>
+                        </Grid>
+                    )
+                }
 
+            </Grid>
             {
-                hasData && (
-                    <div ref={ref}></div>
+                hasNextPage && (
+                    <Button
+                        onClick={handleClickViewMore}
+                        sx={{ mt: 2 }}
+                        disabled={isFetchingNextPage || isRefetching}
+                    >
+                        Ver más
+                    </Button>
                 )
             }
-        </Grid>
+        </>
     )
 }
